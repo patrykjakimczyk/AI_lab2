@@ -1,0 +1,39 @@
+body {
+    margin: 0;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    background-color: aliceblue;
+}
+
+#content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 70%;
+}
+
+#todo-list > li {
+    position: relative;
+    padding: 12px 8px 12px 0px;
+    padding-left: 5%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    overflow: hidden;
+}
+
+#todo-list > li:hover {
+    cursor: pointer;
+}
+
+.input-container {
+    display: flex;
+}
