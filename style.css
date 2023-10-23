@@ -1,14 +1,19 @@
 body {
     margin: 0;
+    background-color: aliceblue;
+}
+
+body > * {
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #container {
+    padding-top: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
     height: auto;
-    background-color: aliceblue;
 }
 
 #content {
@@ -19,21 +24,90 @@ body {
     width: 70%;
 }
 
-#todo-list > li {
+#add-task,
+#search-task,
+.task-input {
+    padding: 10px 15px;
+    width: 300px;
+    font-size: 16px;
+}
+
+.task-value,
+.date-value {
+    padding: 11.5px 10px;
+    font-size: 18px;
+}
+
+#todo-list {
+    width: 100%;
+    padding: 0;
+}
+
+#first-li-div {
+    width: 80%;
+    /* flex: 0 0 80%; */
+}
+
+#second-li-div {
+    display: flex;
+    justify-content: end;
+    width: 20%;
+    /* flex: 0 0 20%; */
+}
+
+.task-value {
     position: relative;
-    padding: 12px 8px 12px 0px;
-    padding-left: 5%;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
+    width: 80%;
+    display: inline-block;
+    text-wrap: wrap;
+    word-wrap: break-word;
+}
+
+#todo-list > li {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
     user-select: none;
+    gap: 15px;
     overflow: hidden;
 }
 
 #todo-list > li:hover {
+    background-color: rgb(223, 240, 255);
+}
+
+#todo-list > li > div {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.checkbox {
+    width: 20px;
+    height: 20px;
+}
+
+.task-value, 
+.delete-button {
     cursor: pointer;
+}
+
+.date {
+    width: 90px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.delete-button {
+    background-color: transparent;
+    border: none;
+    font-size: 16px;
+    width: 20px;
 }
 
 .input-container {
     display: flex;
+    gap: 5px;
 }

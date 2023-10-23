@@ -33,22 +33,25 @@ class ToDo {
         }
     
         this.#list.appendChild(this.#createListElem(task, date, checked));
+        this.#searchForTask();
     
         this.#addTaskField.value = "";
         this.#addTaskDate.value = "";
     }
 
     #createListElem(task, date, checked) {
-        let checkBox = document.createElement("input");
+        const firstDiv = document.createElement("div");
+        firstDiv.id = "first-li-div";
+        const checkBox = document.createElement("input");
         checkBox.className = "checkbox";
         checkBox.type = "checkbox";
         checkBox.checked = checked;
 
-        let taskValue = document.createElement("span");
+        const taskValue = document.createElement("span");
         taskValue.innerText = task;
         taskValue.className = "task-value";
         
-        let taskInput = document.createElement("input");
+        const taskInput = document.createElement("input");
         taskInput.type = "text";
         taskInput.value = task;
         taskInput.className = "task-input"
@@ -91,22 +94,59 @@ class ToDo {
             }
         });
         
-        let dateValue = document.createElement("span");
+        const secondDiv = document.createElement("div");
+        secondDiv.id = "second-;i-div";
+        const dateValue = document.createElement("span");
         dateValue.innerText = date;
         dateValue.className = "date";
-        
-        let deleteButton = document.createElement("button");
-        deleteButton.innerText = 'X';
-        deleteButton.onclick = () => {
-            this.#list.removeChild(listElem);
-        }
 
-        let listElem = document.createElement("li");
-        listElem.appendChild(checkBox);
-        listElem.appendChild(taskValue);
-        listElem.appendChild(taskInput);
-        listElem.appendChild(dateValue);
-        listElem.appendChild(deleteButton);
+        const dateInput = document.createElement("input");
+        dateInput.type = "date";
+        dateInput.value = date;
+        dateInput.className = "date-input"
+        dateInput.style.display = "none";
+        dateInput.setAttribute('min', this.#todayDate);
+
+        dateValue.addEventListener("click", () => {
+            dateValue.style.display = "none";
+            dateInput.style.display = "block";
+        });
+
+        const saveModifiedDateValue = () => {
+            const modifiedValue = dateInput.value;
+            dateValue.style.display = "block";
+            dateInput.style.display = "none";
+            console.log(modifiedValue);
+
+            if (new Date(modifiedValue) < new Date(this.#todayDate)) {
+                alert("Task date cannot be in the past");
+                dateInput.value = date;
+                dateValue.innerText = date;
+                return;
+            }
+            
+            date = modifiedValue;
+            dateInput.value = modifiedValue;
+            dateValue.innerText = modifiedValue;
+        };
+
+        dateInput.addEventListener("focusout", saveModifiedDateValue);
+        
+        const deleteButton = document.createElement("button");
+        deleteButton.innerText = 'X';
+        deleteButton.className = "delete-button"
+        deleteButton.onclick = () => this.#list.removeChild(listElem);
+
+        const listElem = document.createElement("li");
+        firstDiv.appendChild(checkBox);
+        firstDiv.appendChild(taskValue);
+        firstDiv.appendChild(taskInput);
+        secondDiv.appendChild(dateValue);
+        secondDiv.appendChild(dateInput);
+        secondDiv.appendChild(deleteButton);
+
+        listElem.appendChild(firstDiv);
+        listElem.appendChild(secondDiv);
         
         return listElem;
     }
@@ -120,7 +160,7 @@ class ToDo {
                 const taskValue = task.querySelector(".task-value");
                 const taskInputValue = task.querySelector(".task-input");
                 taskValue.innerHTML = taskInputValue.value;
-                task.style.display = "block";
+                task.style.display = "";
                 task.style.backgroundColor = "transparent";
             }
 
@@ -132,7 +172,7 @@ class ToDo {
             const taskInputValue = task.querySelector(".task-input");
 
             if (taskInputValue.value.includes(searchValue)) {
-                task.style.display = "block";
+                task.style.display = "";
                 const splits = taskInputValue.value.split(searchValue);
                 taskValue.innerHTML = `${splits[0]}<span style='background-color: lightblue;'>${searchValue}</span>${splits[1]}`;
             } else {
@@ -146,15 +186,13 @@ class ToDo {
         const tasksList = this.#list.childNodes;
         const tasksListToSave = [];
     
-        for (let task of tasksList) {
-            let checked = task.querySelector('.checkbox').checked;
-    
+        tasksList.forEach(task => {
             tasksListToSave.push({
                 taskValue: task.querySelector(".task-input").value,
                 date: task.querySelector(".date").innerText,
-                checked: checked
+                checked: task.querySelector('.checkbox').checked
             });
-        }
+        })
     
         localStorage.setItem("tasks", JSON.stringify(tasksListToSave));
     }
